@@ -42,6 +42,13 @@ button {
 <h2 id="timer">Время: 0</h2>
 <p>Твои очки:</p>
 <div id="score">0</div>
+    <h2>🛒 МАГАЗИН</h2>
+
+<p>Сила клика: <span id="power">1</span></p>
+
+<button onclick="buyUpgrade()">
+    Купить улучшение — 20 очков
+</button>
 
 <button onclick="addPoint()">НАЖМИ МЕНЯ!</button>
 
@@ -50,6 +57,7 @@ button {
 
 <script>
 let score = 0;
+    let power = 1;
 let time = 0;
 let playing = false;
 let timer;
