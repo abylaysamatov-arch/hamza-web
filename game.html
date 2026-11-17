@@ -14,7 +14,11 @@ body {
     text-align: center;
     padding: 30px;
 }
-h1 { color: #60a5fa; }
+
+h1 {
+    color: #60a5fa;
+}
+
 button {
     background: #2563eb;
     color: white;
@@ -25,42 +29,63 @@ button {
     font-size: 18px;
     cursor: pointer;
 }
-#score { font-size: 35px; }
+
+button:hover {
+    background: #1d4ed8;
+}
+
+#score {
+    font-size: 35px;
+}
+
+.shop {
+    background: #1e3a8a;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px auto;
+    max-width: 400px;
+}
 </style>
 </head>
 
 <body>
 
 <h1>HAMZA CLICK GAME</h1>
+
 <h2>Выбери уровень</h2>
 
 <button onclick="startGame(30)">Лёгкий</button>
 <button onclick="startGame(20)">Средний</button>
 <button onclick="startGame(10)">Сложный</button>
 
-    
 <h2 id="timer">Время: 0</h2>
+
 <p>Твои очки:</p>
 <div id="score">0</div>
-    <h2>🛒 МАГАЗИН</h2>
-
-<p>Сила клика: <span id="power">1</span></p>
-
-<button onclick="buyUpgrade()">
-    Купить улучшение — 20 очков
-</button>
 
 <button onclick="addPoint()">НАЖМИ МЕНЯ!</button>
+
+<div class="shop">
+    <h2>🛒 МАГАЗИН</h2>
+
+    <p>Сила клика: <span id="power">1</span></p>
+
+    <button onclick="buyUpgrade()">
+        Купить улучшение — 20 очков
+    </button>
+
+    <p id="shopMessage">Покупай улучшения!</p>
+</div>
 
 <h2 id="record">Рекорд: 0</h2>
 <p id="message">Начни игру!</p>
 
 <script>
 let score = 0;
-    let power = 1;
 let time = 0;
 let playing = false;
 let timer;
+let power = 1;
 
 let record = Number(localStorage.getItem("hamzaRecord")) || 0;
 
@@ -77,6 +102,7 @@ function startGame(seconds) {
     document.getElementById("score").innerText = score;
     document.getElementById("timer").innerText =
         "Время: " + time;
+
     document.getElementById("message").innerText =
         "Быстрее нажимай!";
 
@@ -95,6 +121,7 @@ function startGame(seconds) {
 
             if (score > record) {
                 record = score;
+
                 localStorage.setItem("hamzaRecord", record);
 
                 document.getElementById("record").innerText =
@@ -110,8 +137,26 @@ function startGame(seconds) {
 function addPoint() {
     if (!playing) return;
 
-    score++;
+    score += power;
+
     document.getElementById("score").innerText = score;
+}
+
+function buyUpgrade() {
+    if (score >= 20) {
+        score -= 20;
+        power++;
+
+        document.getElementById("score").innerText = score;
+        document.getElementById("power").innerText = power;
+
+        document.getElementById("shopMessage").innerText =
+            "Улучшение куплено! Теперь клик приносит " +
+            power + " очков!";
+    } else {
+        document.getElementById("shopMessage").innerText =
+            "Недостаточно очков! Нужно 20.";
+    }
 }
 </script>
 
