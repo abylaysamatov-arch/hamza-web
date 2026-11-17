@@ -35,7 +35,8 @@ button:hover {
 }
 
 #score {
-    font-size: 35px;
+    font-size: 40px;
+    font-weight: bold;
 }
 
 .shop {
@@ -69,12 +70,13 @@ button:hover {
     <h2>🛒 МАГАЗИН</h2>
 
     <p>Сила клика: <span id="power">1</span></p>
+    <p>Цена улучшения: 20 очков</p>
 
     <button onclick="buyUpgrade()">
-        Купить улучшение — 20 очков
+        КУПИТЬ УЛУЧШЕНИЕ
     </button>
 
-    <p id="shopMessage">Покупай улучшения!</p>
+    <p id="shopMessage">Собери 20 очков!</p>
 </div>
 
 <h2 id="record">Рекорд: 0</h2>
@@ -85,12 +87,12 @@ let score = 0;
 let time = 0;
 let playing = false;
 let timer;
-let power = 1;
 
+let power = Number(localStorage.getItem("hamzaPower")) || 1;
 let record = Number(localStorage.getItem("hamzaRecord")) || 0;
 
-document.getElementById("record").innerText =
-    "Рекорд: " + record;
+document.getElementById("power").innerText = power;
+document.getElementById("record").innerText = "Рекорд: " + record;
 
 function startGame(seconds) {
     clearInterval(timer);
@@ -100,17 +102,15 @@ function startGame(seconds) {
     playing = true;
 
     document.getElementById("score").innerText = score;
-    document.getElementById("timer").innerText =
-        "Время: " + time;
-
-    document.getElementById("message").innerText =
-        "Быстрее нажимай!";
-
+    document.getElementById("timer").innerText = "Время: " + time;
+    document.getElementById("message").innerText = "Быстрее нажимай!";
+    document.getElementById("shopMessage").innerText =
+        "Собери 20 очков для покупки!";
+    
     timer = setInterval(function() {
         time--;
 
-        document.getElementById("timer").innerText =
-            "Время: " + time;
+        document.getElementById("timer").innerText = "Время: " + time;
 
         if (time <= 0) {
             clearInterval(timer);
@@ -121,7 +121,6 @@ function startGame(seconds) {
 
             if (score > record) {
                 record = score;
-
                 localStorage.setItem("hamzaRecord", record);
 
                 document.getElementById("record").innerText =
@@ -143,20 +142,22 @@ function addPoint() {
 }
 
 function buyUpgrade() {
-    if (score >= 20) {
-        score -= 20;
-        power++;
-
-        document.getElementById("score").innerText = score;
-        document.getElementById("power").innerText = power;
-
+    if (score < 20) {
         document.getElementById("shopMessage").innerText =
-            "Улучшение куплено! Теперь клик приносит " +
-            power + " очков!";
-    } else {
-        document.getElementById("shopMessage").innerText =
-            "Недостаточно очков! Нужно 20.";
+            "Недостаточно очков! У тебя: " + score;
+        return;
     }
+
+    score -= 20;
+    power++;
+
+    localStorage.setItem("hamzaPower", power);
+
+    document.getElementById("score").innerText = score;
+    document.getElementById("power").innerText = power;
+
+    document.getElementById("shopMessage").innerText =
+        "ПОКУПКА УДАЛАСЬ! Теперь клик даёт " + power + " очков!";
 }
 </script>
 
